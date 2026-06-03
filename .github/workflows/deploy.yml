@@ -1,0 +1,22 @@
+name: DevOps-CI流水线
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test_build:
+    runs-on: ubuntu-latest
+    steps:
+      #拉取代码
+      - name: 拉取项目代码
+        uses: actions/checkout@v4
+      #自动化单元测试CI
+      - name: 执行pytest单元测试
+        run: |
+          pip install -r requirements.txt
+          pytest test_app.py -v
+      #流水线构建Docker镜像（只构建不上传）
+      - name: 构建Docker镜像
+        run: |
+          docker build -t demo-app:v1 .
+          docker images
